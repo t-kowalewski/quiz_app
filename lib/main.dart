@@ -23,22 +23,40 @@ class _MyAppState extends State<MyApp> {
   static const _questions = [
     {
       'questionText': 'What\'s your favorite color?',
-      'answer': ['Red', 'Green', 'Yellow', 'Blue']
+      'answer': [
+        {'text': 'Red', 'score': 1},
+        {'text': 'Green', 'score': 7},
+        {'text': 'Yellow', 'score': 5},
+        {'text': 'Blue', 'score': 3}
+      ]
     },
     {
       'questionText': 'What\'s your favorite pet?',
-      'answer': ['Cat', 'Turtle', 'Parrot', 'Owl']
+      'answer': [
+        {'text': 'Cat', 'score': 7},
+        {'text': 'Turtle', 'score': 1},
+        {'text': 'Parrot', 'score': 5},
+        {'text': 'Owl', 'score': 3}
+      ]
     },
     {
       'questionText': 'What\'s your favorite town?',
-      'answer': ['Toronto', 'New York', 'Los Angeles', 'Dublin']
+      'answer': [
+        {'text': 'Toronto', 'score': 7},
+        {'text': 'New York', 'score': 5},
+        {'text': 'Los Angeles', 'score': 1},
+        {'text': 'Dublin', 'score': 3}
+      ]
     },
   ];
 
   var _questionIndex = 0;
+  var _totalScore = 0;
 
   // Methods
-  void _answerQuestion() {
+  void _answerQuestion(int score) {
+    _totalScore += score;
+
     setState(() {
       _questionIndex += 1;
     });
@@ -49,12 +67,19 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  void _resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+      _totalScore = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('My App'),
+          title: Text('Quiz App'),
         ),
         body: _questionIndex < _questions.length
             ? Quiz(
@@ -62,7 +87,7 @@ class _MyAppState extends State<MyApp> {
                 questionIndex: _questionIndex,
                 answerQuestion: _answerQuestion,
               )
-            : Result(),
+            : Result(_totalScore, _resetQuiz),
       ),
     );
   }
